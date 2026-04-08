@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoDeal — Car Sales</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+  }
+
+  /* NAV */
+  nav {
+    background: #1a1a2e;
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo { color: #e8b84b; font-size: 22px; font-weight: bold; letter-spacing: 1px; }
+  .nav-links { display: flex; gap: 24px; list-style: none; }
+  .nav-links a {
+    color: #ccc;
+    text-decoration: none;
+    font-size: 15px;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 4px;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    background: #e8b84b;
+    color: #1a1a2e;
+  }
+
+  /* PAGES */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ===== HOME ===== */
+  .hero {
+    background: #1a1a2e;
+    color: white;
+    text-align: center;
+    padding: 80px 40px;
+  }
+  .hero h1 { font-size: 42px; margin-bottom: 16px; }
+  .hero h1 span { color: #e8b84b; }
+  .hero p { font-size: 17px; color: #aaa; margin-bottom: 32px; }
+  .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn-gold {
+    background: #e8b84b;
+    color: #1a1a2e;
+    border: none;
+    padding: 12px 28px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .btn-gold:hover { background: #d4a335; }
+
+  /* Stats */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    background: #16213e;
+    padding: 28px 40px;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-size: 28px; font-weight: bold; color: #e8b84b; }
+  .stat-label { font-size: 13px; color: #aaa; margin-top: 4px; }
+
+  /* Cars */
+  .section { padding: 60px 40px; }
+  .section h2 { font-size: 26px; margin-bottom: 8px; }
+  .section-sub { color: #888; margin-bottom: 32px; font-size: 14px; }
+  .divider { width: 50px; height: 3px; background: #e8b84b; margin-bottom: 32px; }
+
+  .cars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .car-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .car-img {
+    background: #e9ecef;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .car-img img { width: 100%; height: 100%; object-fit: cover; }
+  .car-body { padding: 18px; }
+  .car-brand { font-size: 12px; color: #e8b84b; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+  .car-name { font-size: 20px; font-weight: bold; margin: 4px 0 8px; }
+  .car-specs { font-size: 13px; color: #888; margin-bottom: 14px; }
+  .car-footer { display: flex; align-items: center; justify-content: space-between; }
+  .car-price { font-size: 22px; font-weight: bold; color: #1a1a2e; }
+
+  /* ===== INFO PAGE ===== */
+  .info-hero {
+    background: #1a1a2e;
+    color: white;
+    padding: 60px 40px;
+  }
+  .info-hero h1 { font-size: 34px; margin-bottom: 12px; }
+  .info-hero h1 span { color: #e8b84b; }
+  .info-hero p { color: #aaa; font-size: 16px; max-width: 560px; }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+    padding: 60px 40px;
+    background: white;
+  }
+  .feature-box {
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 28px 22px;
+    background: #fafafa;
+  }
+  .feature-icon { font-size: 32px; margin-bottom: 12px; }
+  .feature-box h3 { font-size: 17px; margin-bottom: 8px; color: #1a1a2e; }
+  .feature-box p { font-size: 14px; color: #666; line-height: 1.6; }
+
+  /* FOOTER */
+  footer {
+    background: #1a1a2e;
+    color: #aaa;
+    text-align: center;
+    padding: 24px;
+    font-size: 13px;
+  }
+  footer span { color: #e8b84b; }
+
+  @media (max-width: 800px) {
+    nav { padding: 14px 20px; }
+    .hero, .section, .info-hero, .features { padding-left: 20px; padding-right: 20px; }
+    .stats { gap: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">🚗 AutoDeal</div>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+    <li><a onclick="showPage('info')" id="nav-info">Info</a></li>
+  </ul>
+</nav>
+
+<!-- ===== HOME PAGE ===== -->
+<div class="page active" id="page-home">
+
+  <div class="hero">
+    <h1>Find Your <span>Dream Car</span></h1>
+    <p>Pune's trusted car dealership — premium cars at honest prices.</p>
+    <div class="hero-btns">
+      <button class="btn-gold" onclick="showPage('info')">Browse Cars</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-num">240+</div><div class="stat-label">Cars Sold</div></div>
+    <div class="stat"><div class="stat-num">18</div><div class="stat-label">Brands</div></div>
+    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Verified</div></div>
+    <div class="stat"><div class="stat-num">5 ★</div><div class="stat-label">Rating</div></div>
+  </div>
+
+  <div class="section" style="background: white;">
+    <h2>Featured Cars</h2>
+    <div class="section-sub">Hand-picked premium vehicles</div>
+    <div class="divider"></div>
+    <div class="cars-grid">
+
+      <div class="car-card">
+        <div class="car-img"><img src="A.jpg" alt="Porsche 911"></div>
+        <div class="car-body">
+          <div class="car-brand">Porsche</div>
+          <div class="car-name">911 Carrera S</div>
+          <div class="car-specs">450 BHP &nbsp;|&nbsp; 3.0s 0-100 &nbsp;|&nbsp; 2024</div>
+          <div class="car-footer">
+            <div class="car-price">₹1.82 Cr</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="car-card">
+        <div class="car-img"><img src="b2.webp" alt="BMW M5"></div>
+        <div class="car-body">
+          <div class="car-brand">BMW</div>
+          <div class="car-name">M5 Competition</div>
+          <div class="car-specs">625 BHP &nbsp;|&nbsp; 3.3s 0-100 &nbsp;|&nbsp; 2023</div>
+          <div class="car-footer">
+            <div class="car-price">₹1.55 Cr</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="car-card">
+        <div class="car-img"><img src="c.jpg" alt="Mercedes AMG"></div>
+        <div class="car-body">
+          <div class="car-brand">Mercedes</div>
+          <div class="car-name">AMG GT 63</div>
+          <div class="car-specs">585 BHP &nbsp;|&nbsp; 3.2s 0-100 &nbsp;|&nbsp; 2024</div>
+          <div class="car-footer">
+            <div class="car-price">₹2.10 Cr</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== INFO PAGE ===== -->
+<div class="page" id="page-info">
+
+  <div class="info-hero">
+    <h1>About <span>AutoDeal</span></h1>
+    <p>We are Pune's most trusted car dealership since 2016 — matching the right car to the right person.</p>
+  </div>
+
+  <div class="features">
+    <div class="feature-box">
+      <div class="feature-icon">🔍</div>
+      <h3>150-Point Inspection</h3>
+      <p>Every car is thoroughly checked before it reaches our showroom. Quality is never compromised.</p>
+    </div>
+    <div class="feature-box">
+      <div class="feature-icon">📜</div>
+      <h3>Clear Documentation</h3>
+      <p>Full paperwork, RC transfer, insurance and loan assistance — we handle it all.</p>
+    </div>
+    <div class="feature-box">
+      <div class="feature-icon">🤝</div>
+      <h3>Honest Pricing</h3>
+      <p>No hidden charges. No pressure. Just fair deals and transparent pricing.</p>
+    </div>
+    <div class="feature-box">
+      <div class="feature-icon">🚘</div>
+      <h3>Test Drive Anytime</h3>
+      <p>Book a test drive easily. We can come to you or you can visit our Khondhwa NIBM showroom.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  &copy; 2025 <span>AutoDeal</span> — Khondhwa NIBM, Pune &nbsp;|&nbsp; All rights reserved.
+</footer>
+
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    document.getElementById('nav-' + id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+</script>
+
+</body>
+</html>
